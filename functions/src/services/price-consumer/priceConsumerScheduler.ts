@@ -7,9 +7,15 @@ export const priceConsumerScheduler = functions
     .pubsub
     .schedule("every 5 minutes")
     .onRun(async (context) => {
-      const prices = await getNextDayForecast();
-      const averagePrice = prices.prices.reduce((a, b) => a + b.price, 0);
-      await saveDaysPrices({db, prices: {averagePrice, ...prices}});
+      const dayPriceData = await getNextDayForecast();
+      const averagePrice = dayPriceData.prices.reduce((a, b) => a + b.price, 0);
+      const kwhPrices = dayPriceData
+          .prices
+          .map((price: any) => price.price / 1000);
+      await saveDaysPrices({
+        db,
+        prices: {averagePrice: averagePrice / 1000, prices: kwhPrices},
+      });
       return;
     });
 
