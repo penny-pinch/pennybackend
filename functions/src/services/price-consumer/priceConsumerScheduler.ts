@@ -13,7 +13,8 @@ export const priceConsumerScheduler = functions
           .map((price: any) => {
             return {price: price.price / 1000, time: price.time};
           });
-      const averagePrice = kwhPrices.reduce((a, b) => a + b.price, 0);
+      const averagePrice =
+        kwhPrices.reduce((a, b) => a + b.price, 0) / kwhPrices.length;
       await saveDaysPrices({
         db,
         prices: {
