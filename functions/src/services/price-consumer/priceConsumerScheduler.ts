@@ -8,14 +8,16 @@ export const priceConsumerScheduler = functions
     .schedule("every 5 minutes")
     .onRun(async (context) => {
       const dayPriceData = await getNextDayForecast();
-      const averagePrice = dayPriceData.prices.reduce((a, b) => a + b.price, 0);
       const kwhPrices = dayPriceData
           .prices
-          .map((price: any) => price.price / 1000);
+          .map((price: any) => {
+            return {price: price.price / 1000, time: price.time};
+          });
+      const averagePrice = kwhPrices.reduce((a, b) => a + b.price, 0);
       await saveDaysPrices({
         db,
         prices: {
-          averagePrice: averagePrice / 1000,
+          averagePrice: averagePrice,
           prices: kwhPrices,
           date: dayPriceData.date,
         },
