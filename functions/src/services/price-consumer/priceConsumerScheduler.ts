@@ -8,7 +8,8 @@ export const priceConsumerScheduler = functions
     .schedule("every 5 minutes")
     .onRun(async (context) => {
       const prices = await getNextDayForecast();
-      await saveDaysPrices({db, prices});
+      const averagePrice = prices.prices.reduce((a, b) => a + b.price, 0);
+      await saveDaysPrices({db, prices: {averagePrice, ...prices}});
       return;
     });
 
