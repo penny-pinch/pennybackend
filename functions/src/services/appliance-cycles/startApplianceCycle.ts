@@ -6,7 +6,7 @@ export const applianceCycleTrigger =
     const priceRef = db.doc("prices/49wuk0lqwKyWMADWGPUv");
     const priceSnap = await priceRef.get();
     const priceData = priceSnap.data();
-    await startApplianceCycle({
+    const applianceCycle = await startApplianceCycle({
       appliance: {
         name: "Washing machine",
         cycleLengthHours: 2.5,
@@ -15,7 +15,7 @@ export const applianceCycleTrigger =
       prices: priceData,
       startTime: 10,
     });
-    response.send("Success");
+    response.send(applianceCycle);
   });
 
 
@@ -54,8 +54,5 @@ export const startApplianceCycle = async (props: any) => {
     duration: appliance.cycleLengthHours,
   };
 
-  await db
-      .collection("applianceCycles")
-      .add(applianceCycle);
-  return;
+  return applianceCycle;
 };
