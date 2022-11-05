@@ -1,0 +1,30 @@
+export const getNextDayForecast = async () => {
+  return {
+    date: Date.now(),
+    prices: [
+      {time: "00:00", price: 146.67},
+      {time: "01:00", price: 133.79},
+      {time: "02:00", price: 118.76},
+      {time: "03:00", price: 114.99},
+      {time: "04:00", price: 114.99},
+      {time: "05:00", price: 114.99},
+      {time: "06:00", price: 114.36},
+      {time: "07:00", price: 120.00},
+      {time: "08:00", price: 118.60},
+      {time: "09:00", price: 110.50},
+      {time: "10:00", price: 107.04},
+      {time: "11:00", price: 102.58},
+      {time: "12:00", price: 106.46},
+      {time: "13:00", price: 109.20},
+      {time: "14:00", price: 108.48},
+      {time: "15:00", price: 107.04},
+      {time: "16:00", price: 113.80},
+      {time: "17:00", price: 157.27},
+      {time: "18:00", price: 170.00},
+      {time: "19:00", price: 163.29},
+      {time: "20:00", price: 149.99},
+      {time: "21:00", price: 148.49},
+      {time: "22:00", price: 129.00},
+      {time: "23:00", price: 114.72},
+    ]};
+};
