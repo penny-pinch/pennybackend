@@ -6,16 +6,28 @@ export const applianceCycleTrigger =
     const priceRef = db.doc("prices/49wuk0lqwKyWMADWGPUv");
     const priceSnap = await priceRef.get();
     const priceData = priceSnap.data();
+    const appliance = request.body.appliance;
+    const now = new Date();
+
     const applianceCycle = await startApplianceCycle({
       appliance: {
-        name: "Washing machine",
-        cycleLengthHours: 2.5,
-        consumption: 0.8,
+        name: appliance.name,
+        cycleLengthHours: appliance.cycleLengthHours,
+        consumption: appliance.consumption,
       },
       prices: priceData,
-      startTime: 10,
+      startTime: now.getHours(),
     });
-    response.send(applianceCycle);
+    functions.logger.log("priceData", priceData);
+    try {
+      response.send(applianceCycle);
+    } catch (error) {
+      if (error instanceof Error) {
+        response.send(error.message);
+      } else {
+        response.send(error);
+      }
+    }
   });
 
 
@@ -46,13 +58,11 @@ export const startApplianceCycle = async (props: any) => {
     cost += (overflowPrice * appliance.consumption);
   }
 
-  const applianceCycle = {
+  return {
     appliance: appliance.name,
     cost,
     differenceFromAverage: averageCost - cost,
     differenceFromHighest: highestCost - cost,
     duration: appliance.cycleLengthHours,
   };
-
-  return applianceCycle;
 };
